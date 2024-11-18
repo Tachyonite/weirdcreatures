@@ -21,12 +21,34 @@ function addFilenames() {
     }
 }
 
+function randomizeImagesOnce() {
     headImage.src = heads[Math.floor(Math.random() * heads.length)];
     bodyImage.src = bodies[Math.floor(Math.random() * bodies.length)];
     tailImage.src = tails[Math.floor(Math.random() * tails.length)];
 }
 
+function randomizeImagesSlotMachine(duration) {
+    let timeElapsed = 0;
+    let flickerInterval = 50;
 
+    function flicker() {
+        if (timeElapsed >= duration) {
+            randomizeImagesOnce();
+            return;
+        }
 
-document.getElementById("randomizeButton").addEventListener("click", randomizeImages);
+        randomizeImagesOnce();
+        timeElapsed += flickerInterval;
+        flickerInterval *= 1.1;
+
+        setTimeout(flicker, flickerInterval);
+    }
+
+    flicker();
+}
+
+document.getElementById("randomizeButton").addEventListener("click", function () {
+    randomizeImagesSlotMachine(2000);
+});
+
 window.addEventListener("load", addFilenames);
